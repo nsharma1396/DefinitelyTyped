@@ -1,8 +1,9 @@
-// Type definitions for react-svg-pan-zoom 2.5
+// Type definitions for react-svg-pan-zoom 2.8
 // Project: https://github.com/chrvadala/react-svg-pan-zoom#readme
-// Definitions by: Huy Nguyen <https://github.com/huy-nguyen>
+// Definitions by: Neeraj Sharma <https://github.com/nsharma1396>
 // Definitions: https://github.com/DefinitelyTyped/DefinitelyTyped
 // TypeScript Version: 2.6
+
 
 import * as React from 'react';
 
@@ -78,6 +79,9 @@ export interface OptionalProps {
 	// handler something changed
 	onChangeValue(value: Value): void;
 
+	// Callback called when the zoom level changes
+	onZoom(value: Value): void;
+
 	// handler tool changed
 	onChangeTool(tool: Tool): void;
 
@@ -103,6 +107,15 @@ export interface OptionalProps {
 	// how much scale in or out
 	scaleFactor: number;
 
+	// minimum amount of scale a user can zoom out of
+	scaleFactorMin: number;
+
+	// maximum amount of scale a user can zoom in to
+	scaleFactorMax: number;
+	
+	// how much scale in or out on mouse wheel (requires detectWheel to be enabled) (%)
+	scaleFactorOnWheel: number
+
 	// current active tool (TOOL_NONE, TOOL_PAN, TOOL_ZOOM_IN, TOOL_ZOOM_OUT)
 	tool: Tool;
 
@@ -112,6 +125,17 @@ export interface OptionalProps {
 	// override default toolbar component
 	// TODO: specify function type more clearly
 	customToolbar: React.Component<any> | React.StatelessComponent<any>;
+
+	// miniature
+	miniaturePosition: string;
+
+	miniatureBackground: string;
+
+	miniatureWidth: number;
+
+	miniatureHeight: number;
+
+	customMiniature: React.Component<any> | React.StatelessComponent<any>;
 
 	// How about touch events? They are in README but not in `propTypes`.
 }
@@ -131,10 +155,11 @@ export interface RequiredProps {
 export type Props = RequiredProps & Partial<OptionalProps>;
 
 export class ReactSVGPanZoom extends React.Component<Props> {
+	ViewerDOM: SVGElement;
 	pan(SVGDeltaX: number, SVGDeltaY: number): void;
 	zoom(SVGPointX: number, SVGPointY: number, scaleFactor: number): void;
 	fitSelection(selectionSVGPointX: number, selectionSVGPointY: number, selectionWidth: number, selectionHeight: number): void;
-	fitToViewer(): void;
+	fitToViewer(SVGAlignX?: string, SVGAlignY?: string): void;
 	setPointOnViewerCenter(SVGPointX: number, SVGPointY: number, zoomLevel: number): void;
 	reset(): void;
 	zoomOnViewerCenter(scaleFactor: number): void;
@@ -142,6 +167,7 @@ export class ReactSVGPanZoom extends React.Component<Props> {
 	setValue(value: Value): void;
 	getTool(): Tool;
 	setTool(tool: Tool): void;
+	changeTool(tool: Tool): void;
 }
 
 export interface Point {
@@ -189,3 +215,4 @@ export function zoomOnViewerCenter(value: Value, scaleFactor: number): Value;
 export function setPointOnViewerCenter(value: Value, SVGPointX: number, SVGPointY: number, zoomLevel: number): Value;
 
 export function reset(value: Value): Value;
+
